@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Xml;
 using FluentNHibernate.AutoMap.TestFixtures.SuperTypes;
 using FluentNHibernate.Conventions;
+using FluentNHibernate.Conventions.AcceptanceCriteria;
+using FluentNHibernate.Conventions.InspectionDsl;
 using FluentNHibernate.Mapping;
 using FluentNHibernate.Utils;
 using NUnit.Framework;
@@ -369,14 +371,14 @@ namespace FluentNHibernate.Testing.DomainModel.Mapping
 
         private class TestIdConvention : IIdConvention
         {
-            public bool Accept(IIdentityPart target)
+            public void Accept(IAcceptanceCriteria<IIdentityInspector> acceptance)
             {
-                return true;
+                // acceptance.Always();
             }
 
-            public void Apply(IIdentityPart target)
+            public void Apply(IIdentityInspector target)
             {
-                target.ColumnName("col");
+                // target.ColumnName("col");
             }
         }
 	}

@@ -1,5 +1,5 @@
-using System;
-using FluentNHibernate.Mapping;
+using FluentNHibernate.Conventions.AcceptanceCriteria;
+using FluentNHibernate.Conventions.InspectionDsl;
 
 namespace FluentNHibernate.Conventions.Defaults
 {
@@ -8,16 +8,16 @@ namespace FluentNHibernate.Conventions.Defaults
     /// </summary>
     public class PropertyTypeConvention : IPropertyConvention
     {
-        public bool Accept(IProperty target)
+        public void Accept(IAcceptanceCriteria<IPropertyInspector> acceptance)
         {
-            // TODO: Fix this with convention DSL, tests will fail until then
-            //return !target.HasAttribute("type") && !target.PropertyType.IsEnum;
-            throw new NotSupportedException("Awaiting convention DSL");
+            acceptance
+                .Expect(x => x.CustomType, Is.Not.Set)
+                .Expect(x => x.PropertyType.IsEnum == false);
         }
 
-        public void Apply(IProperty target)
+        public void Apply(IPropertyInspector target)
         {
-            target.CustomTypeIs(target.PropertyType);
+            //target.CustomTypeIs(target.PropertyType);
         }
     }
 }
