@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Xml;
 using FluentNHibernate.AutoMap;
+using FluentNHibernate.Mapping.Providers;
 using FluentNHibernate.MappingModel;
 using FluentNHibernate.Utils;
 
@@ -17,11 +18,11 @@ namespace FluentNHibernate.Mapping
         {
             get { return m_Parts; }
         }
-        protected readonly IList<PropertyMap> properties = new List<PropertyMap>();
+        protected readonly IList<IPropertyMappingProvider> properties = new List<IPropertyMappingProvider>();
         protected readonly IList<IComponentBase> components = new List<IComponentBase>();
         protected readonly IList<ISubclass> subclasses = new List<ISubclass>();
         protected readonly IList<IJoinedSubclass> joinedSubclasses = new List<IJoinedSubclass>();
-        protected readonly IList<IVersion> versions = new List<IVersion>();
+        protected readonly IList<IVersionMappingProvider> versions = new List<IVersionMappingProvider>();
 
         protected internal void AddPart(IMappingPart part)
         {
@@ -291,7 +292,7 @@ namespace FluentNHibernate.Mapping
             }
         }
 
-        IEnumerable<PropertyMap> IClasslike.Properties
+        IEnumerable<IPropertyMappingProvider> IClasslike.Properties
         {
             get { return properties; }
         }
@@ -309,6 +310,11 @@ namespace FluentNHibernate.Mapping
         IEnumerable<IJoinedSubclass> IClasslike.JoinedSubclasses
         {
             get { return joinedSubclasses; }
+        }
+
+        IEnumerable<IVersionMappingProvider> IClasslike.Versions
+        {
+            get { return versions; }
         }
 
         void IClasslike.AddSubclass(ISubclass subclass)

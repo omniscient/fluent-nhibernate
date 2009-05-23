@@ -1,12 +1,12 @@
 using System;
 using System.Reflection;
-using System.Xml;
+using FluentNHibernate.Mapping.Providers;
 using FluentNHibernate.MappingModel;
 using NHibernate.UserTypes;
 
 namespace FluentNHibernate.Mapping
 {
-    public class PropertyMap
+    public class PropertyMap : IPropertyMappingProvider
     {
         private readonly Type parentType;
         private readonly AccessStrategyBuilder<PropertyMap> access;
@@ -25,7 +25,7 @@ namespace FluentNHibernate.Mapping
             this.parentType = parentType;
         }
 
-        public PropertyMapping GetPropertyMapping()
+        PropertyMapping IPropertyMappingProvider.GetPropertyMapping()
         {
             if (columnNames.List().Count == 0)
                 columnNames.Add(mapping.Name);

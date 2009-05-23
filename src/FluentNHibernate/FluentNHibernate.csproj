@@ -258,6 +258,8 @@
     <Compile Include="Mapping\MappingPartComparer.cs" />
     <Compile Include="Mapping\ParamBuilder.cs" />
     <Compile Include="Mapping\Prefix.cs" />
+    <Compile Include="Mapping\Providers\IPropertyMappingProvider.cs" />
+    <Compile Include="Mapping\Providers\IVersionMappingProvider.cs" />
     <Compile Include="Mapping\VersionGeneratedBuilder.cs" />
     <Compile Include="Utils\XmlExtensions.cs" />
     <Compile Include="SessionSource.cs" />
