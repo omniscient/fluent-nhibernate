@@ -37,7 +37,7 @@ namespace FluentNHibernate.AutoMap
             {
                 if (property.PropertyType.IsEnum || property.GetIndexParameters().Length != 0) continue;
 
-                var propertyMap = (IProperty)mapMethod.Invoke(componentPart, new[] {ExpressionBuilder.Create(property, componentType)});
+                var propertyMap = (PropertyMap)mapMethod.Invoke(componentPart, new[] {ExpressionBuilder.Create(property, componentType)});
 
                 propertyMap.ColumnNames.Add(columnNamePrefix + property.Name);
             }

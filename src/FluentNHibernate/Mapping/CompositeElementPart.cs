@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Xml;
 using FluentNHibernate.MappingModel;
 using FluentNHibernate.Utils;
-using NHibernate.Type;
 
 namespace FluentNHibernate.Mapping
 {
@@ -48,7 +47,7 @@ namespace FluentNHibernate.Mapping
             if (!string.IsNullOrEmpty(columnName))
                 propertyMap.ColumnName(columnName);
 
-            m_Parts.Add(propertyMap);
+            //properties.Add(propertyMap); // new
 
             return propertyMap;
         }
@@ -74,7 +73,6 @@ namespace FluentNHibernate.Mapping
 
             return part;
         }
-
 
         private readonly Cache<string, string> localProperties = new Cache<string, string>();
         private PropertyInfo parentReference;
