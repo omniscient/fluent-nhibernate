@@ -5,7 +5,8 @@ using System.Xml;
 using FluentNHibernate.AutoMap.TestFixtures.SuperTypes;
 using FluentNHibernate.Conventions;
 using FluentNHibernate.Conventions.AcceptanceCriteria;
-using FluentNHibernate.Conventions.InspectionDsl;
+using FluentNHibernate.Conventions.Alterations;
+using FluentNHibernate.Conventions.Inspections;
 using FluentNHibernate.Mapping;
 using FluentNHibernate.Utils;
 using NUnit.Framework;
@@ -376,9 +377,9 @@ namespace FluentNHibernate.Testing.DomainModel.Mapping
                 // acceptance.Always();
             }
 
-            public void Apply(IIdentityInspector target)
+            public void Apply(IIdentityAlteration alteration, IIdentityInspector inspector)
             {
-                // target.ColumnName("col");
+                alteration.ColumnName("col");
             }
         }
 	}

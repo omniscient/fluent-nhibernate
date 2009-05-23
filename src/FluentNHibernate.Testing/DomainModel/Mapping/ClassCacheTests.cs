@@ -66,14 +66,6 @@ namespace FluentNHibernate.Testing.DomainModel.Mapping
                 .Element("class/cache").HasAttribute("region", "MyRegion");
         }
 
-        [Test]
-        public void ShouldWriteCustomAttributes()
-        {
-            new MappingTester<CacheTarget>()
-                .ForMapping(mapping => mapping.Cache.AsReadWrite().SetAttribute("custom","attribute"))
-                .Element("class/cache").HasAttribute("custom", "attribute");
-        }
-
         private class CacheTarget
         {
             public virtual int Id { get; set; }

@@ -79,7 +79,7 @@ namespace FluentNHibernate.Mapping
             if (batchSize > 0)
                 collectionElement.WithAtt("batch-size", batchSize.ToString());
 
-		    Cache.Write(collectionElement, visitor);
+		    //Cache.Write(collectionElement, visitor);
 
             XmlElement key = collectionElement.AddElement("key");
 			key.WithAtt("column", ParentKeyColumn);

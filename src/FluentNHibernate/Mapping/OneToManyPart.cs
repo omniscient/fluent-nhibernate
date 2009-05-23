@@ -28,7 +28,7 @@ namespace FluentNHibernate.Mapping
         public override void Write(XmlElement classElement, IMappingVisitor visitor)
         {
             XmlElement collectionElement = WriteCollectionElement(classElement);
-            Cache.Write(collectionElement, visitor);
+//            Cache.Write(collectionElement, visitor);
             WriteKeyElement(visitor, collectionElement);
 
             if (indexMapping != null)

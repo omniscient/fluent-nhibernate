@@ -51,7 +51,7 @@ namespace FluentNHibernate.Mapping
         /// <summary>
         /// Specify caching for this entity.
         /// </summary>
-        public ICache Cache { get; private set; }
+        public CachePart Cache { get; private set; }
 
         public T LazyLoad()
         {

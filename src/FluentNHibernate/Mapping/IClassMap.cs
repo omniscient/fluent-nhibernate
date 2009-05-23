@@ -3,7 +3,7 @@ namespace FluentNHibernate.Mapping
     public interface IClassMap : IClasslike, IHasAttributes, IMappingProvider
     {
         string TableName { get; }
-        ICache Cache { get; }
+        CachePart Cache { get; }
         Cache<string, string> Attributes { get; }
         Cache<string, string> HibernateMappingAttributes { get; }
         /// <summary>

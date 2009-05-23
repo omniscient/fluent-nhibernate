@@ -1,54 +1,42 @@
-using System;
-using System.Xml;
+using FluentNHibernate.Mapping.Providers;
 using FluentNHibernate.MappingModel;
 
 namespace FluentNHibernate.Mapping
 {
-    public interface ICache : IMappingPart
-    {
-        ICache AsReadWrite();
-        ICache AsNonStrictReadWrite();
-        ICache AsReadOnly();
-        ICache AsCustom(string custom);
-        ICache Region(string name);
-        bool IsDirty { get; }
-        CacheMapping GetCacheMapping();
-    }
-
-    public class CachePart : ICache
+    public class CachePart : ICacheMappingProvider
     {
         private readonly CacheMapping mapping = new CacheMapping();
 
-        public CacheMapping GetCacheMapping()
+        CacheMapping ICacheMappingProvider.GetCacheMapping()
         {
             return mapping;
         }
 
-        public ICache AsReadWrite()
+        public CachePart AsReadWrite()
         {
            mapping.Usage = "read-write";
            return this;
         }
 
-        public ICache AsNonStrictReadWrite()
+        public CachePart AsNonStrictReadWrite()
         {
             mapping.Usage = "nonstrict-read-write";
             return this;
         }
 
-        public ICache AsReadOnly()
+        public CachePart AsReadOnly()
         {
             mapping.Usage = "read-only";
             return this;
         }
 
-        public ICache AsCustom(string custom)
+        public CachePart AsCustom(string custom)
         {
             mapping.Usage = custom;
             return this;
         }
 
-        public ICache Region(string name)
+        public CachePart Region(string name)
         {
             mapping.Region = name;
             return this;
@@ -57,31 +45,6 @@ namespace FluentNHibernate.Mapping
         public bool IsDirty
         {
             get { return mapping.Attributes.IsSpecified(x => x.Region) || mapping.Attributes.IsSpecified(x => x.Usage); }
-        }
-
-        void IHasAttributes.SetAttributes(Attributes attrs)
-        {
-            throw new NotSupportedException("Obsolete");
-        }
-
-        void IHasAttributes.SetAttribute(string name, string value)
-        {
-            throw new NotSupportedException("Obsolete");
-        }
-
-        void IMappingPart.Write(XmlElement classElement, IMappingVisitor visitor)
-        {
-            throw new NotSupportedException("Obsolete");
-        }
-
-        int IMappingPart.LevelWithinPosition
-        {
-            get { throw new NotSupportedException("Obsolete"); }
-        }
-
-        PartPosition IMappingPart.PositionOnDocument
-        {
-            get { throw new NotSupportedException("Obsolete"); }
         }
     }
 }

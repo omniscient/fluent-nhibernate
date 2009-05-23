@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using FluentNHibernate.AutoMap;
+using FluentNHibernate.Mapping.Providers;
 using FluentNHibernate.MappingModel;
 using FluentNHibernate.MappingModel.ClassBased;
 using FluentNHibernate.Utils;
@@ -19,9 +20,8 @@ namespace FluentNHibernate.Mapping
         /// <summary>
         /// Specify caching for this entity.
         /// </summary>
-        public ICache Cache { get; private set; }
+        public CachePart Cache { get; private set; }
         private IIdentityPart id;
-
         private readonly IList<ImportPart> imports = new List<ImportPart>();
         private bool nextBool = true;
 
@@ -64,7 +64,7 @@ namespace FluentNHibernate.Mapping
                 mapping.Discriminator = discriminator.GetDiscriminatorMapping();
 
             if (Cache.IsDirty)
-                mapping.Cache = Cache.GetCacheMapping();
+                mapping.Cache = ((ICacheMappingProvider)Cache).GetCacheMapping();
 
             if (id != null)
                 mapping.Id = id.GetIdMapping();
