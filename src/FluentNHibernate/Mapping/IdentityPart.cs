@@ -3,28 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
+using FluentNHibernate.Mapping.Providers;
 using FluentNHibernate.MappingModel;
 using FluentNHibernate.MappingModel.Identity;
 using FluentNHibernate.Utils;
 
 namespace FluentNHibernate.Mapping
 {
-    public class IdentityPart : IIdentityPart
+    public class IdentityPart : IIdMappingProvider
     {
         private readonly AttributeStore<ColumnMapping> columnAttributes = new AttributeStore<ColumnMapping>();
         private readonly IList<string> columns = new List<string>();
 		private readonly PropertyInfo property;
-        private readonly AccessStrategyBuilder<IIdentityPart> access;
+        private readonly AccessStrategyBuilder<IIdMappingProvider> access;
 
         private readonly IdMapping mapping = new IdMapping();
 
         public IdentityPart(Type entity, PropertyInfo property, string columnName)
 		{
             this.property = property;
-            EntityType = entity;
 
-            access = new AccessStrategyBuilder<IIdentityPart>(this, value => mapping.Access = value);
-            GeneratedBy = new IdentityGenerationStrategyBuilder<IIdentityPart>(this, IdentityType);
+            access = new AccessStrategyBuilder<IIdMappingProvider>(this, value => mapping.Access = value);
+            GeneratedBy = new IdentityGenerationStrategyBuilder<IIdMappingProvider>(this, property.PropertyType);
 
             ColumnName(columnName);
 
@@ -37,44 +37,32 @@ namespace FluentNHibernate.Mapping
 
         private void SetDefaultGenerator()
         {
-            if (IdentityType == typeof(Guid))
+            if (property.PropertyType == typeof(Guid))
                 GeneratedBy.GuidComb();
-            else if (IdentityType == typeof(int) || IdentityType == typeof(long))
+            else if (property.PropertyType == typeof(int) || property.PropertyType == typeof(long))
                 GeneratedBy.Identity();
             else
                 GeneratedBy.Assigned();
         }
 
-        IdMapping IIdentityPart.GetIdMapping()
+        IdMapping IIdMappingProvider.GetIdMapping()
         {
             foreach (var column in columns)
                 mapping.AddColumn(new ColumnMapping(columnAttributes.Clone()) { Name = column });
 
-            mapping.Name = Property.Name;
-            mapping.Type = Property.PropertyType.AssemblyQualifiedName;
+            mapping.Name = property.Name;
+            mapping.Type = property.PropertyType.AssemblyQualifiedName;
             mapping.Generator = GeneratedBy.GetGeneratorMapping();
 
             return mapping;
         }
 
-        public IdentityGenerationStrategyBuilder<IIdentityPart> GeneratedBy { get; private set; }
-
-        public Type IdentityType
-		{
-			get { return property.PropertyType; }
-		}
-
-        public Type EntityType { get; private set; }
-
-        public PropertyInfo Property
-        {
-            get { return property; }
-        }
+        public IdentityGenerationStrategyBuilder<IIdMappingProvider> GeneratedBy { get; private set; }
 
         /// <summary>
         /// Set the access and naming strategy for this identity.
         /// </summary>
-        public AccessStrategyBuilder<IIdentityPart> Access
+        public AccessStrategyBuilder<IIdMappingProvider> Access
 	    {
 	        get { return access; }
 	    }
@@ -83,7 +71,7 @@ namespace FluentNHibernate.Mapping
         /// Sets the unsaved-value of the identity.
         /// </summary>
         /// <param name="unsavedValue">Value that represents an unsaved value.</param>
-        public IIdentityPart UnsavedValue(object unsavedValue)
+        public IIdMappingProvider UnsavedValue(object unsavedValue)
         {
             mapping.UnsavedValue = unsavedValue.ToString();
             return this;
@@ -93,52 +81,11 @@ namespace FluentNHibernate.Mapping
         /// Sets the column name for the identity field.
         /// </summary>
         /// <param name="columnName">Column name</param>
-        public IIdentityPart ColumnName(string columnName)
+        public IIdMappingProvider ColumnName(string columnName)
         {
             columns.Clear(); // only currently support one column for ids
             columns.Add(columnName);
             return this;
-        }
-
-        /// <summary>
-        /// Gets the column name
-        /// </summary>
-        /// <returns></returns>
-        public string GetColumnName()
-        {
-            var column = mapping.Columns.FirstOrDefault();
-
-            return column != null ? column.Name : null;
-        }
-
-        void IMappingPart.Write(XmlElement classElement, IMappingVisitor visitor)
-        {
-            throw new NotSupportedException("Obsolete");
-        }
-
-        /// <summary>
-        /// Set an attribute on the xml element produced by this identity mapping.
-        /// </summary>
-        /// <param name="name">Attribute name</param>
-        /// <param name="value">Attribute value</param>
-        void IHasAttributes.SetAttribute(string name, string value)
-        {
-            throw new NotSupportedException("Obsolete");
-        }
-
-        void IHasAttributes.SetAttributes(Attributes atts)
-        {
-            throw new NotSupportedException("Obsolete");
-        }
-
-        int IMappingPart.LevelWithinPosition
-        {
-            get { throw new NotSupportedException("Obsolete"); }
-        }
-
-        PartPosition IMappingPart.PositionOnDocument
-        {
-            get { throw new NotSupportedException("Obsolete"); }
         }
     }
 }

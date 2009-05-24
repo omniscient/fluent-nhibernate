@@ -268,7 +268,7 @@
     <Compile Include="Testing\PersistenceSpecification.cs" />
     <Compile Include="Testing\SingleConnectionSessionSourceForSQLiteInMemoryTesting.cs" />
     <Compile Include="Utils\ExpressionToSql.cs" />
-    <Compile Include="Mapping\IIdentityPart.cs" />
+    <Compile Include="Mapping\Providers\IIdMappingProvider.cs" />
     <Compile Include="Mapping\ImportPart.cs" />
     <Compile Include="Mapping\IOneToManyPart.cs" />
     <Compile Include="Mapping\JoinPart.cs" />

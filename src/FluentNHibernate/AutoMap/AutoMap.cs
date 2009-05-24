@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using FluentNHibernate.Mapping;
+using FluentNHibernate.Mapping.Providers;
 using FluentNHibernate.Utils;
 
 namespace FluentNHibernate.AutoMap
@@ -29,7 +30,7 @@ namespace FluentNHibernate.AutoMap
             propertiesMapped.Add(ReflectionHelper.GetProperty(expression));
         }
 
-        public override IIdentityPart Id(Expression<Func<T, object>> expression)
+        public override IdentityPart Id(Expression<Func<T, object>> expression)
         {
             propertiesMapped.Add(ReflectionHelper.GetProperty(expression));
             return base.Id(expression);
@@ -63,7 +64,7 @@ namespace FluentNHibernate.AutoMap
             return base.Component(property, action);
         }
 
-        public override IIdentityPart Id(Expression<Func<T, object>> expression, string column)
+        public override IdentityPart Id(Expression<Func<T, object>> expression, string column)
         {
             propertiesMapped.Add(ReflectionHelper.GetProperty(expression));
             return base.Id(expression, column);

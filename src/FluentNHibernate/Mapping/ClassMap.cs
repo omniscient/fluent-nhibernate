@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
-using FluentNHibernate.AutoMap;
 using FluentNHibernate.Mapping.Providers;
 using FluentNHibernate.MappingModel;
 using FluentNHibernate.MappingModel.ClassBased;
@@ -21,7 +20,7 @@ namespace FluentNHibernate.Mapping
         /// Specify caching for this entity.
         /// </summary>
         public CachePart Cache { get; private set; }
-        private IIdentityPart id;
+        private IIdMappingProvider id;
         private readonly IList<ImportPart> imports = new List<ImportPart>();
         private bool nextBool = true;
 
@@ -167,18 +166,20 @@ namespace FluentNHibernate.Mapping
             HibernateMappingAttributes.Store(name, value.ToString().ToLowerInvariant());
         }
 
-        public virtual IIdentityPart Id(Expression<Func<T, object>> expression)
+        public virtual IdentityPart Id(Expression<Func<T, object>> expression)
         {
             return Id(expression, null);
         }
 
-        public virtual IIdentityPart Id(Expression<Func<T, object>> expression, string column)
+        public virtual IdentityPart Id(Expression<Func<T, object>> expression, string column)
         {
             PropertyInfo property = ReflectionHelper.GetProperty(expression);
             
-            id = column == null ? new IdentityPart(EntityType, property) : new IdentityPart(EntityType, property, column);
+            var idPart = column == null ? new IdentityPart(EntityType, property) : new IdentityPart(EntityType, property, column);
+
+            id = idPart;
             
-            return id;
+            return idPart;
         }
 
         public virtual void JoinedSubClass<TSubclass>(string keyColumn, Action<JoinedSubClassPart<TSubclass>> action) where TSubclass : T
